@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Happy Birthday</title>
+  <meta name="description" content="A little something, made just for you.">
+  <meta name="theme-color" content="#fbe6e1">
+  <!-- Link-preview text shown when you send the link in a chat. Edit if you like. -->
+  <meta property="og:title" content="A little something, just for you ♥">
+  <meta property="og:description" content="Open this when you have a quiet minute.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E💖%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+  <noscript><p class="noscript">This little gift needs JavaScript switched on to open ♥</p></noscript>
+
+  <!-- Confetti / petals canvas (drawn by script.js) -->
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <!-- Optional background music toggle (only appears if CONFIG.music is set) -->
+  <button class="music-toggle" id="musicToggle" type="button" aria-label="Play music" aria-pressed="false" hidden>♪</button>
+
+  <main>
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="top" aria-labelledby="heroName">
+      <div class="hearts" id="heartsHero" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <p class="eyebrow hero-anim a1" data-bind="heroEyebrow"></p>
+        <div class="portrait hero-anim a1" id="portrait" hidden></div>
+        <h1 class="name hero-anim a2" id="heroName"><span data-bind="herName"></span></h1>
+        <div class="ornament hero-anim a3" aria-hidden="true"><span>♥</span></div>
+        <p class="hero-message hero-anim a3" data-bind="heroGreeting"></p>
+      </div>
+      <a class="scroll-cue hero-anim a4" href="#letter">
+        <span data-bind="scrollLabel"></span>
+        <i aria-hidden="true"></i>
+      </a>
+    </section>
+
+    <!-- ============ LETTER ============ -->
+    <section class="section letter" id="letter" aria-labelledby="letterTitle">
+      <div class="wrap narrow">
+        <article class="paper rv">
+          <div class="seal" aria-hidden="true">♥</div>
+          <p class="eyebrow center" data-bind="letterEyebrow"></p>
+          <h2 class="script greeting" id="letterTitle" data-bind="letterGreeting"></h2>
+          <div class="letter-body" id="letterBody"></div>
+          <p class="signoff script">
+            <span data-bind="signoff"></span><br>
+            <span data-bind="fromName"></span>
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ REASONS (rotating) ============ -->
+    <section class="section reasons" id="reasons" aria-labelledby="reasonsTitle">
+      <div class="wrap center">
+        <p class="eyebrow rv" data-bind="reasonsEyebrow"></p>
+        <h2 class="title rv" id="reasonsTitle" data-bind="reasonsTitle"></h2>
+
+        <div class="carousel rv" id="carousel" role="group" aria-roledescription="carousel" aria-label="Reasons I love you">
+          <div class="stage" id="reasonStage" aria-live="off"></div>
+          <div class="controls">
+            <button class="round" id="reasonPrev" type="button" aria-label="Previous reason">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="dots" id="reasonDots"></div>
+            <button class="round" id="reasonNext" type="button" aria-label="Next reason">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MEMORIES (scrolling timeline) ============ -->
+    <section class="section memories" id="memories" aria-labelledby="memoriesTitle">
+      <div class="wrap wide center">
+        <p class="eyebrow rv" data-bind="memoriesEyebrow"></p>
+        <h2 class="title rv" id="memoriesTitle" data-bind="memoriesTitle"></h2>
+        <div class="timeline" id="timeline"></div>
+      </div>
+    </section>
+
+    <!-- ============ THE MOMENT (countdown + reveal) ============ -->
+    <section class="section moment" id="moment" aria-labelledby="momentTitle">
+      <div class="wrap center">
+        <p class="eyebrow rv" data-bind="momentEyebrow"></p>
+        <h2 class="title rv" id="momentTitle" data-bind="momentTitle"></h2>
+        <div class="ornament rv" aria-hidden="true"><span>♥</span></div>
+
+        <div id="locked" class="rv">
+          <div class="tiles" id="countdown" role="timer" aria-label="Time left until your birthday">
+            <div class="tile"><b id="cdDays">00</b><span>Days</span></div>
+            <div class="tile"><b id="cdHours">00</b><span>Hours</span></div>
+            <div class="tile"><b id="cdMins">00</b><span>Minutes</span></div>
+            <div class="tile"><b id="cdSecs">00</b><span>Seconds</span></div>
+          </div>
+          <p class="moment-note" data-bind="momentLockedNote"></p>
+        </div>
+
+        <div id="unlocked" class="rv" hidden>
+          <p class="moment-note" data-bind="momentUnlockedNote"></p>
+          <button class="gift-btn" id="openSurprise" type="button">
+            <svg viewBox="0 0 100 90" width="26" height="24" aria-hidden="true"><path fill="currentColor" d="M50 85C10 52 2 30 14 15 26 1 46 6 50 22 54 6 74 1 86 15c12 15 4 37-36 70z"/></svg>
+            <span data-bind="momentButton"></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CLOSING ============ -->
+    <section class="section closing" id="closing" aria-labelledby="closingTitle">
+      <div class="hearts" id="heartsClosing" aria-hidden="true"></div>
+      <div class="wrap narrow center closing-inner">
+        <div class="ornament rv" aria-hidden="true"><span>♥</span></div>
+        <h2 class="script closing-title rv" id="closingTitle" data-bind="closingTitle"></h2>
+        <p class="closing-message rv" data-bind="closingMessage"></p>
+        <p class="signoff script rv">
+          <span data-bind="signoff"></span><br>
+          <span data-bind="fromName"></span>
+        </p>
+        <button class="btn btn-ghost rv" id="replay" type="button">
+          <span aria-hidden="true">✦</span> <span data-bind="replayLabel"></span>
+        </button>
+        <p class="footnote rv" data-bind="footerNote"></p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ SURPRISE OVERLAY ============ -->
+  <div class="surprise" id="surprise" role="dialog" aria-modal="true" aria-labelledby="surpriseTitle" hidden>
+    <div class="surprise-card">
+      <svg class="big-heart" viewBox="0 0 100 90" aria-hidden="true">
+        <defs>
+          <linearGradient id="heartGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#e48a9c"/>
+            <stop offset="1" stop-color="#9a3a53"/>
+          </linearGradient>
+        </defs>
+        <path fill="url(#heartGrad)" d="M50 85C10 52 2 30 14 15 26 1 46 6 50 22 54 6 74 1 86 15c12 15 4 37-36 70z"/>
+      </svg>
+      <p class="eyebrow" data-bind="surpriseEyebrow"></p>
+      <h2 class="script surprise-title" id="surpriseTitle" data-bind="surpriseTitle"></h2>
+      <p class="surprise-text" data-bind="surpriseMessage"></p>
+      <p class="signoff script">
+        <span data-bind="signoff"></span><br>
+        <span data-bind="fromName"></span>
+      </p>
+      <button class="btn btn-primary" id="closeSurprise" type="button" data-bind="surpriseClose"></button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
